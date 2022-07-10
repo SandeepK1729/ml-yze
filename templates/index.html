@@ -76,6 +76,7 @@
     </header>
     <!-- End Header -->
 
+    {% if message != "" %}
     <section id="hero-animated" class="hero-animated d-flex align-items-center">
         <div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative" data-aos="zoom-out">
             <img src="{{url_for('static',filename='assets/img/mainpic.svg')}}" class="img-fluid animated">
@@ -86,7 +87,7 @@
             </div>
         </div>
     </section>
-
+    {% endif %}
     <main id="main">
         <!-- ======= Analyze Section ======= -->
         <section id="analyze" class="analyze">
