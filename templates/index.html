@@ -27,11 +27,14 @@
     <link href="{{url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='assets/css/variables.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='assets/css/main.css')}}" rel="stylesheet">
+<<<<<<< HEAD
     <style>
         #k_val_div {
             display: none;
         }
     </style>
+=======
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
     <script type="text/javascript">
         $(document).ready(function() {
             // Handler for .ready() called.
@@ -40,7 +43,10 @@
             }, 'fast'); //w  w w.j a v a 2s.com
         });
     </script>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
 </head>
 
 <body>
@@ -69,6 +75,10 @@
         </div>
     </header>
     <!-- End Header -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
     <section id="hero-animated" class="hero-animated d-flex align-items-center">
         <div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative" data-aos="zoom-out">
             <img src="{{url_for('static',filename='assets/img/mainpic.svg')}}" class="img-fluid animated">
@@ -80,8 +90,11 @@
         </div>
     </section>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
     <main id="main">
         <!-- ======= Analyze Section ======= -->
         <section id="analyze" class="analyze">
@@ -105,7 +118,11 @@
                         <br>
                         <!--Choosing classifier-->
                         <label>Choose a classifier:</label><br>
+<<<<<<< HEAD
                         <select onchange="displayDivDemo('k_val_div', this)" id="classifier_name" class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="classifier" required>
+=======
+                        <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="classifier" required>
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
                          <option selected>select any classifier</option>
                          <option value="knn">KNN</option>
                          <option value="svm">SVM</option>
@@ -116,11 +133,17 @@
                         </select>
                         <br>
                         <!--Choosing k value-->
+<<<<<<< HEAD
                         <div id="k_val_div">
                             <label>Choose a K value:</label><br>
                             <label>Default value of k=3</label><br>
                             <input type="range" class="form-range" min="1" max="5" id="customRange2" style="max-width:30%;color: #0ea2bd;" name="kval">
                         </div>
+=======
+                        <label>Choose a K value (If you are using KNN classifier):</label><br>
+                        <label>Default value of k=3</label><br>
+                        <input type="range" class="form-range" min="1" max="5" id="customRange2" style="max-width:30%;color: #0ea2bd;" name="kval">
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
                         <br>
                         <!--Submit Button-->
                         <button type="submit" class="btn" style="background-color: #0ea2bd; color: #ffffff;">Analyze</button>
@@ -228,11 +251,15 @@
 
     <!-- Template Main JS File -->
     <script src="{{url_for('static',filename='assets/js/main.js')}}"></script>
+<<<<<<< HEAD
     <script>
         function displayDivDemo(id, elementValue) {
             document.getElementById(id).style.display = elementValue.value == "knn" ? 'block' : 'none';
         }
     </script>
+=======
+
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
 </body>
 
 </html>

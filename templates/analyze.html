@@ -35,11 +35,14 @@
             }, 'fast'); //w  w w.j a v a 2s.com
         });
     </script>
+<<<<<<< HEAD
     <style>
         #k_val_div {
             display: none;
         }
     </style>
+=======
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
 </head>
 
 <body>
@@ -92,7 +95,11 @@
                         <br>
                         <!--Choosing classifier-->
                         <label>Choose a classifier:</label><br>
+<<<<<<< HEAD
                         <select onchange="displayDivDemo('k_val_div', this)" class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="classifier" required>
+=======
+                        <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="classifier" required>
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
                          <option selected>select any classifier</option>
                          <option value="knn">KNN</option>
                          <option value="svm">SVM</option>
@@ -103,11 +110,17 @@
                         </select>
                         <br>
                         <!--Choosing k value-->
+<<<<<<< HEAD
                         <div id="k_val_div">
                             <label>Choose a K value:</label><br>
                             <label>Default value of k=3</label><br>
                             <input type="range" class="form-range" min="1" max="5" id="customRange2" style="max-width:30%;color: #0ea2bd;" name="kval">
                         </div>
+=======
+                        <label>Choose a K value (If you are using KNN classifier):</label><br>
+                        <label>Default value of k=3</label><br>
+                        <input type="range" class="form-range" min="1" max="5" id="customRange2" style="max-width:30%;color: #0ea2bd;" name="kval">
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
                         <br>
                         <!--Submit Button-->
                         <button type="submit" class="btn" style="background-color: #0ea2bd; color: #ffffff;">Analyze</button>
@@ -216,6 +229,7 @@
     <script src="{{url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
 
     <!-- Template Main JS File -->
+<<<<<<< HEAD
 
     <script src="{{url_for('static',filename='assets/js/main.js')}}"></script>
     <script>
@@ -223,6 +237,9 @@
             document.getElementById(id).style.display = elementValue.value == "knn" ? 'block' : 'none';
         }
     </script>
+=======
+    <script src="{{url_for('static',filename='assets/js/main.js')}}"></script>
+>>>>>>> 1e07aaeb4435a1128470e37fbe46cb9ace38e5ab
 
 </body>
 
