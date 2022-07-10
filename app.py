@@ -23,6 +23,16 @@ from sklearn.metrics import accuracy_score, precision_score,confusion_matrix
 app=Flask(__name__)
 
 #model initialization
+
+classifiers_list = {
+    "naivebayes" : "Naive Bayes", 
+    "svm" : "SVM",
+    "decisiontree" : "Decision Tree Classifier",
+    "randomforest" : "Random Forest Classifier",
+    #(n_estimators = 25), 
+    "adaboost" : "Adaboost Classifier",
+    "knn" : "K Nearest Neighbor Classifier",
+} # classifier key : name
 clf = {
     "naivebayes" : GaussianNB, 
     "svm" : SVC,
@@ -30,7 +40,8 @@ clf = {
     "randomforest" : RandomForestClassifier,
     #(n_estimators = 25), 
     "adaboost" : AdaBoostClassifier,
-} 
+    "knn" : KNeighborsClassifier,
+} # classifier key : method address
 
 @app.route('/')
 def hello_world():
@@ -98,7 +109,7 @@ def entry_point():
         
         result[classifier] = classifier
         result[dataset] = dataset
-    return render_template('analyze.html',resk=kval,resacc=(accuracy*100),respre=(precisons),rescm=cm,resclass=classifier,resdata=dataset,plot_url=plot_url)
+    return render_template('analyze.html',re = result, clf = classifiers_list)
 
 if __name__ == '__main__':
     app.run()
