@@ -83,7 +83,7 @@ def entry_point():
             
             model.fit(X_train,y_train)
             y_pred = model.predict(X_test)
-            result[accuracy] = accuracy_score(y_test,y_pred )
+            result[accuracy] = accuracy_score(y_test,y_pred ) * 100
             result[precison]=precision_score(y_test,y_pred,average='weighted')
             result[cm] =confusion_matrix(y_test,y_pred)
             heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
@@ -96,6 +96,8 @@ def entry_point():
             img.seek(0)
             plot_url = base64.b64encode(img.getvalue()).decode('utf8')
         
+        result[classifier] = classifier
+        result[dataset] = dataset
     return render_template('analyze.html',resk=kval,resacc=(accuracy*100),respre=(precisons),rescm=cm,resclass=classifier,resdata=dataset,plot_url=plot_url)
 
 if __name__ == '__main__':
