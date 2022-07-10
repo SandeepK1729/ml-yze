@@ -27,13 +27,25 @@
     <link href="{{url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='assets/css/variables.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='assets/css/main.css')}}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             // Handler for .ready() called.
             $('html, body').animate({
                 scrollTop: $('#analyze').offset().top
             }, 'fast'); //w  w w.j a v a 2s.com
+            
+            $("#k_value_input").hide();
+            
         });
+        function Indicator() {
+            if($("#classifier_name").val() == "knn") {
+                $("#k_value_input").show();
+            }
+            else {
+                $("#k_value_input").hide();
+            }
+        }
     </script>
 </head>
 
@@ -85,56 +97,59 @@
                     <p>Please choose the below options as per you requirement</p>
                 </div>
                 <h3 style="font-weight: 280;">Input</h3>
-                <form action="/analyze" method="POST">
+                <form action="/" method="POST">
                     <class class="">
+                        {% if message %}   
+                            <div class="alert alert-danger" role="alert" style="max-width:80%"> {{ message }} </div>
+                        {% endif %}
+                        
+
                         <!--Choosing dataset-->
                         <label>Choose a dataset:</label><br>
                         <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="dataset" required>
-                        <option selected>Select any dataset</option>
-                        <option value="wine">Wine</option>
-                        <option value="diabetes">Diabetes</option>
-                        <option value="strokes">Stroke</option>
+                        <option selected value="select">Select any dataset</option>
+                        {% for dataset in datasets %}
+                            <option value="{{ dataset }}">{{ dataset }}</option>
+                        {% endfor %}
                         </select>
                         <br>
                         <!--Choosing classifier-->
                         <label>Choose a classifier:</label><br>
-                        <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="classifier" required>
-                         <option selected>select any classifier</option>
-                         <option value="knn">KNN</option>
-                         <option value="svm">SVM</option>
-                         <option value="naivebayes">Naive Bayes</option>
-                         <option value="decisiontree">Decision Tree</option>
-                         <option value="randomforest">Random Forest</option>
-                         <option value="adaboost">Ada Boost Classifier</option>
+                        <select onchange="Indicator()" id="classifier_name" class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="classifier" required>
+                         <option selected value="select">select any classifier</option> 
+                         
+                         {% for clf in clfs %} 
+                             <option value="{{clf}}">{{ clfs[clf] }}</option>
+                         {% endfor %}
                         </select>
                         <br>
                         <!--Choosing k value-->
-                        <label>Choose a K value (If you are using KNN classifier):</label><br>
-                        <label>Default value of k=3</label><br>
-                        <input type="range" class="form-range" min="1" max="5" id="customRange2" style="max-width:30%;color: #0ea2bd;" name="kval">
-                        <br>
+                        <div id="k_value_input">
+                            <label>Choose a K value (If you are using KNN classifier):</label><br>
+                            <label>Default value of k=3</label><br>
+                            <input type="range" class="form-range" min="1" max="5" id="customRange2" style="max-width:30%;color: #0ea2bd;" name="kval">
+                            <br>
+                        </div>
                         <!--Submit Button-->
-                        <button type="submit" class="btn" style="background-color: #0ea2bd; color: #ffffff;">Analyze</button>
+                        <button id="Submit_btn" type="submit" class="btn" style="background-color: #0ea2bd; color: #ffffff;">Analyze</button>
                     </class>
                 </form>
                 <br><br>
-                <h3 style="font-weight: 280;">Output</h3>
-                <!--
-                {% if resacc!=-100 %}
-                <label>Classifier: {{resclass}}</label>
-                <br>
-                <label>Dataset: {{resdata}}</label> <br> {% if resclass=="knn" %}
-                <label>KNeighbours of classifier: {{resk}}</label><br> {% endif %}
-                <label>Accuracy of classifier: {{resacc}} %</label>
-                <br>
-                <label>Precision of classifier: {{respre}}</label>
-                <br>
-                <label>Confusion matrix of classifier: <br>{{rescm}}</label> {% endif %}
-                -->
-                <div class="alert alert-danger" role="alert" style="max-width:80%">
-                    Please choose the values
-                </div>
 
+                <h3 style="font-weight: 280;">Output</h3>
+                {% if re["accuracy"] %}
+                    <label>Classifier: {{ re["classifier"] }}</label>
+                    <br>
+                    <label>Dataset: {{ re["dataset"] }}</label>                     <br> {% if re["kval"] %}
+                    <label>KNeighbours of classifier: {{ re["kval"] }}</label>      <br> {% endif %}
+                    <label>Accuracy of classifier: {{ re["accuracy"] }} %</label>   <br>
+                    <label>Precision of classifier: {{ re["precision"] }}</label>   <br>
+                    <label>Confusion matrix of classifier:<br>{{ re["cm"] }}</label><br>
+                    <label>Heatmap:</label>
+                    <br>
+                    <img src="data:image/png;base64, {{ plot_url }}" width="350" height="300"> 
+                {% endif %}
+                
 
         </section>
         <!-- End Analyze Section -->
