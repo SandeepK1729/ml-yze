@@ -80,19 +80,21 @@
                         <label>Choose a dataset:</label><br>
                         <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="dataset" required>
                         <option selected>Select any dataset</option>
-                        {% for dataset in datasets %}
-                            <option value="{{ dataset }}">{{ dataset }}</option>
-                        {% endfor %}
+                        <option value="wine">Wine</option>
+                        <option value="diabetes">Diabetes</option>
+                        <option value="strokes">Stroke</option>
                         </select>
                         <br>
                         <!--Choosing classifier-->
                         <label>Choose a classifier:</label><br>
                         <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="max-width:80%;" name="classifier" required>
-                         <option selected>select any classifier</option> 
-                         
-                         {% for clf in classifiers %} 
-                             <option value="{{clf}}">{{ classifiers[clf] }}</option>
-                         {% endfor %}
+                         <option selected>select any classifier</option>
+                         <option value="knn">KNN</option>
+                         <option value="svm">SVM</option>
+                         <option value="naivebayes">Naive Bayes</option>
+                         <option value="decisiontree">Decision Tree</option>
+                         <option value="randomforest">Random Forest</option>
+                         <option value="adaboost">Ada Boost Classifier</option>
                         </select>
                         <br>
                         <!--Choosing k value-->
