@@ -1,0 +1,6 @@
+# ml-yze
+
+This is an web application used for analyzing different machine learning classifiers.
+Techstack used: HTML,CSS,Js,Bootstrap,Flask,Jinja2
+Deploed on: Heroku
+Deployed Link: https://ml-yze.herokuapp.com/
