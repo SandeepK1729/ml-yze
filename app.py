@@ -1,5 +1,3 @@
-from email import message
-from django.shortcuts import render
 from flask import Flask, render_template,request
 from flask import Flask, render_template, request
 import pandas as pd
@@ -25,101 +23,142 @@ from sklearn.metrics import accuracy_score, precision_score,confusion_matrix
 app=Flask(__name__)
 
 #model initialization
-dataset_names = ["Wine", "Diabetes", "Stroke"]
-classifiers_list = {
-    "naivebayes" : "Naive Bayes", 
-    "svm" : "SVM",
-    "decisiontree" : "Decision Tree Classifier",
-    "randomforest" : "Random Forest Classifier",
-    #(n_estimators = 25), 
-    "adaboost" : "Adaboost Classifier",
-    "knn" : "K Nearest Neighbor Classifier",
-} # classifier key : name
-clf = {
-    "naivebayes" : GaussianNB, 
-    "svm" : SVC,
-    "decisiontree" : tree.DecisionTreeClassifier,
-    "randomforest" : RandomForestClassifier,
-    #(n_estimators = 25), 
-    "adaboost" : AdaBoostClassifier,
-    "knn" : KNeighborsClassifier,
-} # classifier key : method address
+gnb = GaussianNB()
+svm = SVC()
+dt = tree.DecisionTreeClassifier()
+rf = RandomForestClassifier(n_estimators = 25)
+ada = AdaBoostClassifier()
 
-def get_X_y(dataset) : 
-    if  dataset=="Diabetes":
-        df = pd.read_csv("csvfiles/diabetes.csv")
-        y = df['Outcome']
-        X = df.drop("Outcome",axis = 1)
-        return (X, y)
-    elif dataset=="Stroke":
-        df = pd.read_csv("csvfiles/strokes.csv")
-        y = df['stroke']
-        X = df.drop("stroke",axis = 1)
-        return (X, y)
-    elif dataset=="Wine":
-        X, y = datasets.load_wine(return_X_y=True)
-        return (X, y)
-    else : 
-        return False
-
-@app.route('/', methods = ["GET", "POST"])
+@app.route('/')
 def hello_world():
-    result = {} 
-    global X, y, X_train, X_test, y_train, y_test 
+    return render_template('index.html')
 
-    if request.method=='POST':    
-        
-        classifier = request.form['classifier']
-        dataset = request.form['dataset']
-        kval = request.form['kval']
-        
 
-        if (dataset not in dataset_names) or (classifier not in clf ): 
-            if dataset == "select" : 
-                message = "Please Select the dataset"
-            elif classifier == "select" : 
-                message = "Please Select the Classifier"
-            else :         
-                message = "Classifier or dataset is not exist"
-            return render_template("index.html", message = message, datasets = datasets, clfs = classifiers_list) 
+@app.route('/analyze',methods=['GET','POST'])
+def entry_point():
+    global df,x,y,X_train, X_test,y_train,y_test
+    cm=[]
+    accuracy=-1
+    precisons=-1
+    kval=-1
+    classifier="not set"
+    dataset="not set"
+    plot_url=""
+    if request.method=='POST':
+        classifier=request.form['classifier']
+        dataset=request.form['dataset']
+        kval=request.form['kval']
+        if  dataset=="diabetes":
+            df = pd.read_csv("csvfiles/diabetes.csv")
+            y = df['Outcome']
+            x = df.drop("Outcome",axis = 1)
+            X_train, X_test,y_train,y_test = train_test_split(x,y,test_size = 0.25)
+        elif dataset=="strokes":
+            df = pd.read_csv("csvfiles/strokes.csv")
+            y = df['stroke']
+            x = df.drop("stroke",axis = 1)
+            X_train, X_test,y_train,y_test = train_test_split(x,y,test_size = 0.25)
+        elif dataset=="wine":
+            df = datasets.load_wine()
+            y = df.target
+            x = df.data
+            X_train, X_test,y_train,y_test = train_test_split(x,y,test_size = 0.25)
+        if classifier=="naivebayes":
+            gnb.fit(X_train,y_train)
+            y_pred_nb = gnb.predict(X_test)
+            accuracy = accuracy_score(y_test,y_pred_nb)
+            precisons=precision_score(y_test,y_pred_nb,average='weighted')
+            cm=confusion_matrix(y_test,y_pred_nb)
+            heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+            plt.title('Heapmap for confusion matrix')
+            img = io.BytesIO()
+            plt.savefig(img, format='png')
+            plt.close()
+            img.seek(0)
+            plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+            #print(accuracy)
+            #print(precisons)
+            #print(cm)
+        elif classifier=="svm":
+            svm.fit(X_train,y_train)
+            y_pred_svm=svm.predict(X_test)
+            accuracy=accuracy_score(y_test,y_pred_svm)
+            precisons=precision_score(y_test,y_pred_svm,average='weighted')
+            cm=confusion_matrix(y_test,y_pred_svm)
+            heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+            plt.title('Heapmap for confusion matrix')
+            img = io.BytesIO()
+            plt.savefig(img, format='png')
+            plt.close()
+            img.seek(0)
+            plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+        elif classifier=="decisiontree":
+            dt.fit(X_train,y_train)
+            y_pred_dt=dt.predict(X_test)
+            accuracy=accuracy_score(y_test,y_pred_dt)
+            precisons=precision_score(y_test,y_pred_dt,average='weighted')
+            cm=confusion_matrix(y_test,y_pred_dt)
+            heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+            plt.title('Heapmap for confusion matrix')
+            img = io.BytesIO()
+            plt.savefig(img, format='png')
+            plt.close()
+            img.seek(0)
+            plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+        elif classifier=="randomforest":
+            rf.fit(X_train,y_train)
+            y_pred_rf = rf.predict(X_test)
+            accuracy = accuracy_score(y_test,y_pred_rf)
+            precisons=precision_score(y_test,y_pred_rf,average='weighted')
+            cm=confusion_matrix(y_test,y_pred_rf)
+            heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+            plt.title('Heapmap for confusion matrix')
+            img = io.BytesIO()
+            plt.savefig(img, format='png')
+            plt.close()
+            img.seek(0)
+            plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+        elif classifier=="adaboost":
+            ada.fit(X_train,y_train)
+            y_pred_ada=ada.predict(X_test)
+            accuracy=accuracy_score(y_test,y_pred_ada)
+            precisons=precision_score(y_test,y_pred_ada,average='weighted')
+            cm=confusion_matrix(y_test,y_pred_ada)
+            heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+            plt.title('Heapmap for confusion matrix')
+            img = io.BytesIO()
+            plt.savefig(img, format='png')
+            plt.close()
+            img.seek(0)
+            plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+        elif classifier=="knn":
+            knnM=KNeighborsClassifier(n_neighbors=int(kval))
+            knnM.fit(X_train,y_train)
+            y_pred_knn = knnM.predict(X_test)
+            accuracy = accuracy_score(y_test,y_pred_knn)
+            precisons=precision_score(y_test,y_pred_knn,average='weighted')
+            cm=confusion_matrix(y_test,y_pred_knn)
+            heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+            plt.title('Heapmap for confusion matrix')
+            img = io.BytesIO()
+            plt.savefig(img, format='png')
+            plt.close()
+            img.seek(0)
+            plot_url = base64.b64encode(img.getvalue()).decode('utf8')
 
-        re = get_X_y(dataset)
-        X, y = re[0], re[1]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
-    
-        model_method = clf[classifier]
-        
-        if classifier == "knn": 
-            model = model_method(n_neighbors = int(kval)) 
-            result["kval"] = kval 
-        elif classifier == "randomforest" : 
-            model = model_method(n_estimators = 25) 
-        else : 
-            model = model_method()
-        
-        model.fit(X_train,y_train)
-        y_pred = model.predict(X_test)
-        result["accuracy"]  = accuracy_score(y_test,y_pred ) * 100
-        result["precision"] = precision_score(y_test,y_pred,average='weighted')
-        cm                  = confusion_matrix(y_test,y_pred)
-
-        heatmap = sns.heatmap(cm, annot=True, cmap="Blues")
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
-        plt.title('Heapmap for confusion matrix')
-        img = io.BytesIO()
-        plt.savefig(img, format='png')
-        plt.close()
-
-        img.seek(0)
-        result["plot_url"] = base64.b64encode(img.getvalue()).decode('utf8')
-        result["cm"] = cm 
-
-        result["classifier"] = classifier
-        result["dataset"] = dataset
-
-    return render_template('index.html', datasets = dataset_names, clfs = classifiers_list, re = result)
+    return render_template('analyze.html',resk=kval,resacc=(accuracy*100),respre=(precisons),rescm=cm,resclass=classifier,resdata=dataset,plot_url=plot_url)
 
 if __name__ == '__main__':
-    app.debug = True
     app.run()
