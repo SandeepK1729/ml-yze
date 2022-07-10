@@ -8,3 +8,10 @@ Deploed on: Heroku
 
 Deployed Link: https://ml-yze.herokuapp.com/
 
+
+
+
+this version has some updates 
+1. fixed repeataion of code of dataset and model 
+2. fixed k value input only at the time of choosing KNN as classifer
+3. and some more
